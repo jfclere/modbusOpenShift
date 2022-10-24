@@ -8,10 +8,12 @@ import uuid
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
 class MyListener(stomp.ConnectionListener):
-    def on_error(self, headers, message):
+    def on_error(self, frame):
+        message = frame.body
         print('received an error "%s"' % message)
-    def on_message(self, headers, message):
-        #print('received a message "%s"' % message)
+    def on_message(self, frame):
+        message = frame.body
+        print('received a message "%s"' % message)
         cmds=str.split(message, '-')
         if cmds[0] == "On":
           instrument.write_register(address=3, count=1, unit=2, value=1)
